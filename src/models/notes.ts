@@ -1,5 +1,13 @@
 import { createModel } from "@rematch/core";
-import {delay, editNoteArrayMutator, DeleteNoteArrayMutator, AddNoteArrayMutator, createNewId} from "../helpers/utils";
+import {
+  delay,
+  editNoteArrayMutator,
+  DeleteNoteArrayMutator,
+  AddNoteArrayMutator,
+  createNewId,
+  deleteTagFromNoteArrayMutator,
+  addTagToNoteArrayMutator
+} from "../helpers/utils";
 import { RootModel } from ".";
 import { ArrayNotesType, StateNotesType, NoteType } from "../Types/models/nodes";
 import { AddNoteType } from "../Types/models/addNote";
@@ -188,6 +196,24 @@ export const notes: any = createModel<RootModel>()({
         }
       ],
       };
+    },
+    successDeleteTagFromNotes(state: StateNotesType, payload: number): StateNotesType {
+      return {
+        ...state,
+        notesList: deleteTagFromNoteArrayMutator(state.notesList, payload),
+        notPinnedList: deleteTagFromNoteArrayMutator(state.notPinnedList, payload),
+        filteredNotesList: deleteTagFromNoteArrayMutator(state.filteredNotesList, payload),
+        pinnedNotesList: deleteTagFromNoteArrayMutator(state.pinnedNotesList, payload),
+      };
+    },
+    successAddTagToNotes(state: StateNotesType, payload: string): StateNotesType {
+      return {
+        ...state,
+        notesList: addTagToNoteArrayMutator(state.notesList, payload),
+        notPinnedList: addTagToNoteArrayMutator(state.notPinnedList, payload),
+        filteredNotesList: addTagToNoteArrayMutator(state.filteredNotesList, payload),
+        pinnedNotesList: addTagToNoteArrayMutator(state.pinnedNotesList, payload),
+      };
     }
   },
   effects: (dispatch) => {
@@ -225,6 +251,16 @@ export const notes: any = createModel<RootModel>()({
       },
       unPinNote(payload: number) {
         notes.successUnPinNote(
+            payload
+        )
+      },
+      deleteTagFromNotes(payload: number) {
+        notes.successDeleteTagFromNotes(
+            payload
+        )
+      },
+      addTagToNotes(payload: string) {
+        notes.successAddTagToNotes(
             payload
         )
       }

@@ -25,6 +25,7 @@ const TagsCloud = (): ReactElement => {
 
     const handleDeleteClick = (id: number): () => void => (): void => {
         dispatch.tags.deleteTag(id)
+        dispatch.notes.deleteTagFromNotes(id)
     }
 
     const handleAddChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +35,7 @@ const TagsCloud = (): ReactElement => {
     const handleAddSubmit = () => {
         if (newAddName) {
             dispatch.tags.addTag(newAddName)
+            dispatch.notes.addTagToNotes(newAddName)
             setNewAddName('')
         }
     }

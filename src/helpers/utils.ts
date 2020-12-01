@@ -72,6 +72,24 @@ export const AddNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType,
     }
 }
 
+export const deleteTagFromNoteArrayMutator = (state: ArrayNotesType, payload: number) => {
+    return state.map(item => {
+        return {
+            ...item,
+            noteTags: DeleteTagArrayMutator(item.noteTags, payload)
+        }
+    })
+}
+
+export const addTagToNoteArrayMutator = (state: ArrayNotesType, payload: string) => {
+    return state.map(item => {
+        return {
+            ...item,
+            noteTags: AddTagArrayMutator(item.noteTags, payload)
+        }
+    })
+}
+
 export const createNewId = (state: ArrayNotesType) => {
     return Math.max(...state.map(item => item.id)) + 1
 }

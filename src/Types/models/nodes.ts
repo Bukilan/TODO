@@ -4,7 +4,7 @@ import { ArrayTagsType } from "./tag";
 export type NoteType = AddNoteType & {
     id: number,
     isPinned: boolean,
-    noteTags?: ArrayTagsType
+    noteTags: ArrayTagsType
 }
 
 export type ArrayNotesType = Array<NoteType>
