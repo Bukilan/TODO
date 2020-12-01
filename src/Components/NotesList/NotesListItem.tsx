@@ -51,7 +51,7 @@ const NotesListItem = ({ title, description, id, isPinned = false }: Props): Rea
                 <h3 className='NotesListItem-title'>{title}</h3>
                 <div className='NotesListItem-description'>{description}</div>
             </Paper>
-            <NoteModal initTitle={title} initDescription={description} id={id} isEditNote isOpen={isEditNoteOpen} handleClose={changeEditNoteOpen} />
+            <NoteModal initTitle={title} initDescription={description} id={id} isPinned={isPinned} isEditNote isOpen={isEditNoteOpen} handleClose={changeEditNoteOpen} />
         </div>
     );
 }

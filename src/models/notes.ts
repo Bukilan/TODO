@@ -1,5 +1,5 @@
 import { createModel } from "@rematch/core";
-import {delay, editNoteArrayMutator, DeleteNoteArrayMutator, AddNoteArrayMutator, getNoteById} from "../helpers/utils";
+import {delay, editNoteArrayMutator, DeleteNoteArrayMutator, AddNoteArrayMutator, createNewId} from "../helpers/utils";
 import { RootModel } from ".";
 import { ArrayNotesType, StateNotesType, NoteType } from "../Types/models/nodes";
 import { AddNoteType } from "../Types/models/addNote";
@@ -51,7 +51,7 @@ export const notes: any = createModel<RootModel>()({
       };
     },
     successAddLoadNote(state: StateNotesType, payload: AddNoteType): StateNotesType {
-      const newId = state.notesList.length ?  state.notesList[state.notesList.length - 1].id + 1 : 1
+      const newId = createNewId(state.notesList)
       return {
         ...state,
         notesList: AddNoteArrayMutator(state.notesList, payload, newId, 'NotesList'),
@@ -63,10 +63,10 @@ export const notes: any = createModel<RootModel>()({
     successEditNote(state: StateNotesType, payload: NoteType): StateNotesType {
       return {
         ...state,
-        notesList: editNoteArrayMutator(state.notesList, payload),
-        filteredNotesList: editNoteArrayMutator(state.filteredNotesList, payload),
-        notPinnedList: editNoteArrayMutator(state.filteredNotesList, payload),
-        pinnedNotesList: editNoteArrayMutator(state.pinnedNotesList, payload)
+        notesList: editNoteArrayMutator(state.notesList, payload, 'NotesList'),
+        filteredNotesList: editNoteArrayMutator(state.filteredNotesList, payload, 'filteredNotesList'),
+        notPinnedList: editNoteArrayMutator(state.filteredNotesList, payload, 'notPinnedList'),
+        pinnedNotesList: editNoteArrayMutator(state.pinnedNotesList, payload, 'pinnedNotesList')
       };
     },
     successDeleteNote(state: StateNotesType, payload: number): StateNotesType {

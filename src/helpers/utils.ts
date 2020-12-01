@@ -1,6 +1,8 @@
 import {NoteType, ArrayNotesType} from "../Types/models/nodes";
 import {AddNoteType} from "../Types/models/addNote";
 
+type ArrayType = 'NotesList' | 'filteredNotesList' | 'pinnedNotesList' | 'notPinnedList'
+
 export const delay = (ms: number) =>
 	new Promise(resolve => setTimeout(resolve, ms))
 
@@ -8,7 +10,7 @@ export const getNoteById = (state: ArrayNotesType, id: number) => {
     return state.findIndex((el) => el.id === id);
 }
 
-export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType) => {
+export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType, type: ArrayType) => {
     const index = getNoteById(state, payload.id)
     const newList = [...state]
     if (index >= 0) {
@@ -16,7 +18,22 @@ export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType) =
             ...payload
         }
     }
-    return newList
+
+    switch (type) {
+        case "NotesList":
+            return newList
+        case "filteredNotesList":
+            if (payload.isPinned) return state
+            return newList
+        case "notPinnedList":
+            if (payload.isPinned) return state
+            return newList
+        case "pinnedNotesList":
+            if (!payload.isPinned) return state
+            return newList
+        default:
+            return state
+    }
 }
 
 export const DeleteNoteArrayMutator = (state: ArrayNotesType, id: number) => {
@@ -28,7 +45,7 @@ export const DeleteNoteArrayMutator = (state: ArrayNotesType, id: number) => {
 }
 
 
-export const AddNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType, newId: number, type: 'NotesList' | 'filteredNotesList' | 'pinnedNotesList' | 'notPinnedList') => {
+export const AddNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType, newId: number, type: ArrayType) => {
     const newArr = [
         ...state,
         {
@@ -40,6 +57,7 @@ export const AddNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType,
         case "NotesList":
             return newArr
         case "filteredNotesList":
+            if (payload.isPinned) return state
             return newArr
         case "notPinnedList":
             if (payload.isPinned) return state
@@ -50,4 +68,8 @@ export const AddNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType,
         default:
             return state
     }
+}
+
+export const createNewId = (state: ArrayNotesType) => {
+    return Math.max(...state.map(item => item.id)) + 1
 }

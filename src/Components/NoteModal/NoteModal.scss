@@ -41,4 +41,21 @@
     border: none;
     outline: none;
   }
+
+  &-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &-switch {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    &_text {
+      font-size: 14px;
+    }
+  }
 }
