@@ -7,15 +7,17 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import './NotesListItem.scss';
 import NoteModal from '../NoteModal';
 import {useDispatch} from "react-redux";
+import TagsCloudDisplay from "../TagsCloud/TagsCloudDisplay";
+import {ArrayTagsType} from "../../Types/models/tag";
+import {NoteType} from "../../Types/models/nodes";
 
 type Props = {
-    title: string,
-    description: string,
-    id: number,
-    isPinned?: boolean,
+    currentNote: NoteType
 }
 
-const NotesListItem = ({ title, description, id, isPinned = false }: Props): ReactElement => {
+const NotesListItem = ({ currentNote }: Props): ReactElement => {
+    const {id, title, description, isPinned, noteTags} = currentNote
+
     const dispatch = useDispatch()
 
     const [isEditNoteOpen, setIsEditNoteOpen] = useState<boolean>(false)
@@ -50,6 +52,9 @@ const NotesListItem = ({ title, description, id, isPinned = false }: Props): Rea
                 </IconButton>
                 <h3 className='NotesListItem-title'>{title}</h3>
                 <div className='NotesListItem-description'>{description}</div>
+                {noteTags && noteTags.length ? (
+                    <TagsCloudDisplay tags={noteTags} />
+                ) : null}
             </Paper>
             <NoteModal initTitle={title} initDescription={description} id={id} isPinned={isPinned} isEditNote isOpen={isEditNoteOpen} handleClose={changeEditNoteOpen} />
         </div>

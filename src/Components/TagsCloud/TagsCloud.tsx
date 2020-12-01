@@ -32,8 +32,10 @@ const TagsCloud = (): ReactElement => {
     }
 
     const handleAddSubmit = () => {
-        dispatch.tags.addTag(newAddName)
-        setNewAddName('')
+        if (newAddName) {
+            dispatch.tags.addTag(newAddName)
+            setNewAddName('')
+        }
     }
 
     return (

@@ -1,10 +1,14 @@
-import React, {ReactElement, ChangeEvent, useState} from 'react';
+import React, {ReactElement, ChangeEvent, useState, useEffect} from 'react';
 import ModalWindow from "../ModalWindow";
 import Button from '@material-ui/core/Button';
 import TextareaAutosize from 'react-textarea-autosize';
 import './NoteModal.scss';
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Switch from '@material-ui/core/Switch';
+import TagsCloudItem from "../TagsCloud/TagsCloudItem";
+import {ArrayTagsType, StateTagsType} from "../../Types/models/tag";
+import {RootStateType} from "../../Types/models/root";
+import { changeTagStatus } from "../../helpers/utils";
 
 type Props = {
     isOpen: boolean,
@@ -19,10 +23,24 @@ type Props = {
 
 const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', id, isPinned = false, isEditNote = false }: Props): ReactElement => {
     const dispatch = useDispatch();
+    const { tagsList }: StateTagsType = useSelector(({ tags }: RootStateType) => tags);
 
     const [title, setTitle] = useState<string>(initTitle)
     const [description, setDescription] = useState<string>(initDescription)
     const [isBePinned, setIsBePinned] = useState<boolean>(isPinned)
+    const [tagsArray, setTagsArray] = useState<ArrayTagsType>([])
+
+    useEffect(() => {
+        setTagsArray(
+            tagsList.map(item => {
+                return {
+                    id: item.id,
+                    isActive: false,
+                    name: item.name
+                }
+            })
+        )
+    }, [tagsList, setTagsArray])
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
@@ -45,6 +63,7 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
             title,
             description,
             isPinned: isBePinned,
+            noteTags: tagsArray
         })
 
         setTitle('')
@@ -73,6 +92,12 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
         }
     }
 
+    const handleTagClick = (id: number): () => void => (): void => {
+        setTagsArray(prev => {
+            return changeTagStatus(prev, id)
+        })
+    }
+
     return (
         <div className='AddNote-zone'>
             <ModalWindow
@@ -83,6 +108,11 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
                     <div className='AddNote-container'>
                         <input onChange={handleTitleChange} value={title} placeholder='Название...' className='AddNote-title AddNote-input' />
                         <TextareaAutosize onChange={handleDescriptionChange} value={description} placeholder='Заметка...' className='AddNote-description AddNote-input' />
+                        <div className='AddNote-tags'>
+                            {tagsArray.map(item => (
+                                <TagsCloudItem key={item.id} name={item.name} id={item.id} isActive={item.isActive} onElemClick={handleTagClick} />
+                            ))}
+                        </div>
                         <div className='AddNote-controls'>
                             <div className='AddNote-switch'>
                                 <Switch

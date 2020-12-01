@@ -33,10 +33,10 @@ const App = () => {
             {filteredNotesList ? (
                 <NotesList openAddModal={changeAddNoteOpen}>
                     {pinnedNotesList.map((item) => (
-                        <NotesList.Item key={`pinned-${item.id}`} isPinned id={item.id} title={item.title} description={item.description} />
+                        <NotesList.Item key={`pinned-${item.id}`} currentNote={item} />
                     ))}
-                    {[...filteredNotesList].map((item) => (
-                        <NotesList.Item key={item.id} id={item.id} title={item.title} description={item.description} />
+                    {filteredNotesList.map((item) => (
+                        <NotesList.Item key={item.id}  currentNote={item} />
                     ))}
                 </NotesList>
             ) : null}

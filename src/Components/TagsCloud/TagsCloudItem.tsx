@@ -9,7 +9,7 @@ type Props = {
     isActive: boolean,
     id: number,
     onElemClick: (id: number) => () => void,
-    onDeleteClick: (id: number) => () => void
+    onDeleteClick?: (id: number) => () => void
 }
 
 const TagsCloudItem = ({ name, isActive, onElemClick, onDeleteClick, id }: Props): ReactElement => {
@@ -18,9 +18,11 @@ const TagsCloudItem = ({ name, isActive, onElemClick, onDeleteClick, id }: Props
             <Button className='TagsCloudItem-button' onClick={onElemClick(id)} variant={!isActive ? 'outlined' : 'contained'} color={!isActive ? 'inherit' : 'primary'} size='small'>
                 {name}
             </Button>
-            <IconButton color='secondary' onClick={onDeleteClick(id)} className='TagsCloudItem-delete' aria-label="delete">
-                <DeleteIcon />
-            </IconButton>
+            {onDeleteClick ? (
+                <IconButton color='secondary' onClick={onDeleteClick(id)} className='TagsCloudItem-delete' aria-label="delete">
+                    <DeleteIcon />
+                </IconButton>
+            ) : null}
         </div>
     );
 }

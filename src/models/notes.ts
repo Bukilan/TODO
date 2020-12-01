@@ -11,6 +11,18 @@ const initialNotesState: ArrayNotesType = [
       title: 'title1',
       description: 'desc1',
       isPinned: false,
+      noteTags: [
+        {
+          id: 1,
+          name: 'Я',
+          isActive: false
+        },
+        {
+          id: 2,
+          name: 'ХОЧУ',
+          isActive: false
+        },
+      ]
     },
     {
       id: 2,
