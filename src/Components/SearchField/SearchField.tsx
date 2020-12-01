@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import './SearchField.scss';
 import SearchIcon from '@material-ui/icons/Search';
 import Grid from "@material-ui/core/Grid";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 
 const SearchField = (): ReactElement => {
     const dispatch = useDispatch()
@@ -19,7 +19,7 @@ const SearchField = (): ReactElement => {
         <Grid container justify='center'>
             <Grid className='SearchField-container' item lg={4} sm={8} xs={10}>
                 <SearchIcon color='inherit' className='SearchField-icon' />
-                <TextField value={searchQuery} onChange={handleChange} className='SearchField' id="standard-search" label="Search field" type="search" />
+                <TextField label="Поиск" placeholder="Найти заметку" value={searchQuery} onChange={handleChange} className='SearchField' id="standard-search" type="search" />
             </Grid>
         </Grid>
     );

@@ -5,6 +5,7 @@ import NotesList from "./Components/NotesList/NotesList";
 import './App.scss';
 import NoteModal from "./Components/NoteModal";
 import SearchField from "./Components/SearchField";
+import TagsCloud from './Components/TagsCloud'
 
 const App = () => {
     const [isAddNoteOpen, setIsAddNoteOpen] = useState<boolean>(false)
@@ -28,6 +29,7 @@ const App = () => {
     return (
         <div className='PageLayout'>
             <SearchField />
+            <TagsCloud />
             {filteredNotesList ? (
                 <NotesList openAddModal={changeAddNoteOpen}>
                     {pinnedNotesList.map((item) => (

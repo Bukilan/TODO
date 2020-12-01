@@ -1,0 +1,16 @@
+.TagsCloudItem {
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 10px;
+  }
+
+  &-button {
+  }
+
+  &-delete {
+    padding: 0 !important;
+  }
+}
+

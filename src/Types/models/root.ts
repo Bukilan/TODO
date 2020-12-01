@@ -1,5 +1,7 @@
 import { StateNotesType } from "./nodes";
+import {StateTagsType} from "./tag";
 
 export type RootStateType = {
-    notes: StateNotesType
+    notes: StateNotesType,
+    tags: StateTagsType,
 }

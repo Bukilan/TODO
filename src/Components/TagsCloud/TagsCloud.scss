@@ -1,0 +1,13 @@
+.TagsCloud {
+  &-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 30px !important;
+  }
+  &-add_container {
+    margin: 5px 10px;
+  }
+}
+
