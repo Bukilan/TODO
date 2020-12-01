@@ -1,5 +1,5 @@
-import { NotesStateType } from "./nodes";
+import { StateNotesType } from "./nodes";
 
 export type RootStateType = {
-    notes: NotesStateType
+    notes: StateNotesType
 }

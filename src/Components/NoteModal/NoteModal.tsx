@@ -35,7 +35,8 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
         if (!isEditNote) {
             dispatch.notes.addNote({
                 title,
-                description
+                description,
+                isPinned: false,
             })
             setTitle('')
             setDescription('')

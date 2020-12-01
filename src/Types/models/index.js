@@ -1,11 +1,11 @@
-import { NotesType, NotesStateType, NoteType } from './nodes'
+import {  StateNotesType, NoteType, ArrayNotesType } from './nodes'
 import { RootStateType } from './root'
 import { AddNoteType } from './addNote'
 
 export {
-    NotesType,
-    NotesStateType,
+    StateNotesType,
     RootStateType,
     AddNoteType,
     NoteType,
+    ArrayNotesType,
 }

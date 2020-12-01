@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {NotesStateType, RootStateType} from "./Types/models";
+import {StateNotesType, RootStateType} from "./Types/models";
 import NotesList from "./Components/NotesList/NotesList";
 import './App.scss';
 import NoteModal from "./Components/NoteModal";
@@ -14,20 +14,26 @@ const App = () => {
     }
 
     const dispatch = useDispatch();
-    const { filteredNotesList, notesList }: NotesStateType = useSelector(({ notes }: RootStateType) => notes);
+    const { filteredNotesList, notesList, pinnedNotesList, notPinnedList }: StateNotesType = useSelector(({ notes }: RootStateType) => notes);
 
     useEffect(() => {
         dispatch.notes.load()
     }, [])
 
-    // console.log(notesList, filteredNotesList)
+    console.log('notesList', notesList)
+    console.log('filteredNotesList', filteredNotesList)
+    console.log('pinnedNotesList', pinnedNotesList)
+    console.log('notPinnedList', notPinnedList)
 
     return (
         <div className='PageLayout'>
             <SearchField />
             {filteredNotesList ? (
                 <NotesList openAddModal={changeAddNoteOpen}>
-                    {filteredNotesList.map((item) => (
+                    {pinnedNotesList.map((item) => (
+                        <NotesList.Item key={`pinned-${item.id}`} isPinned id={item.id} title={item.title} description={item.description} />
+                    ))}
+                    {[...filteredNotesList].map((item) => (
                         <NotesList.Item key={item.id} id={item.id} title={item.title} description={item.description} />
                     ))}
                 </NotesList>
