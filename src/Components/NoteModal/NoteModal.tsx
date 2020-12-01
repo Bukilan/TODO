@@ -8,7 +8,7 @@ import Switch from '@material-ui/core/Switch';
 import TagsCloudItem from "../TagsCloud/TagsCloudItem";
 import {ArrayTagsType, StateTagsType} from "../../Types/models/tag";
 import {RootStateType} from "../../Types/models/root";
-import { changeTagStatus } from "../../helpers/utils";
+import {changeTagStatus} from "../../helpers/utils";
 
 type Props = {
     isOpen: boolean,
@@ -17,11 +17,12 @@ type Props = {
     initTitle?: string,
     initDescription?: string,
     id?: number,
+    initTags?: ArrayTagsType,
     isPinned?: boolean,
     isEditNote?: boolean
 }
 
-const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', id, isPinned = false, isEditNote = false }: Props): ReactElement => {
+const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', id, initTags = [], isPinned = false, isEditNote = false }: Props): ReactElement => {
     const dispatch = useDispatch();
     const { tagsList }: StateTagsType = useSelector(({ tags }: RootStateType) => tags);
 
@@ -29,17 +30,22 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
     const [description, setDescription] = useState<string>(initDescription)
     const [isBePinned, setIsBePinned] = useState<boolean>(isPinned)
     const [tagsArray, setTagsArray] = useState<ArrayTagsType>([])
+    const [isTagsChanged, setIsTagsChanged] = useState<boolean>(false)
 
     useEffect(() => {
-        setTagsArray(
-            tagsList.map(item => {
-                return {
-                    id: item.id,
-                    isActive: false,
-                    name: item.name
-                }
-            })
-        )
+        if (!initTags.length) {
+            setTagsArray(
+                tagsList.map(item => {
+                    return {
+                        id: item.id,
+                        isActive: false,
+                        name: item.name
+                    }
+                })
+            )
+        } else {
+            setTagsArray(initTags)
+        }
     }, [tagsList, setTagsArray])
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +64,6 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
         if (!title) {
             return
         }
-
         dispatch.notes.addNote({
             title,
             description,
@@ -74,28 +79,38 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
     }
 
     const handleEdit = () => {
-        if (title === initTitle && description === initDescription && isBePinned === isPinned) return
+        if (title === initTitle && description === initDescription && isBePinned === isPinned && !isTagsChanged) return
 
         dispatch.notes.editNote({
             id,
             title,
-            description
+            description,
+            isPinned,
+            noteTags: tagsArray
         })
+
         if (isBePinned) {
-            dispatch.notes.pinNote(
-                id
-            )
+            if (!isPinned) {
+                dispatch.notes.pinNote(
+                    id
+                )
+            }
         } else {
-            dispatch.notes.unPinNote(
-                id
-            )
+            if (isPinned) {
+                dispatch.notes.unPinNote(
+                    id
+                )
+            }
         }
+
+        handleClose()
     }
 
     const handleTagClick = (id: number): () => void => (): void => {
         setTagsArray(prev => {
             return changeTagStatus(prev, id)
         })
+        setIsTagsChanged(true)
     }
 
     return (
@@ -129,7 +144,7 @@ const NoteModal = ({ isOpen, handleClose, initTitle = '', initDescription = '', 
                                     Создать заметку !
                                 </Button>
                             ) : (
-                                <Button onClick={handleEdit} className='AddNote-button' variant="contained" color={title !== initTitle || description !== initDescription || isBePinned !== isPinned ? "primary" : "secondary" }>
+                                <Button disabled={title === initTitle && description === initDescription && isBePinned === isPinned && !isTagsChanged} onClick={handleEdit} className='AddNote-button' variant="contained" color="primary">
                                     Сохранить заметку !
                                 </Button>
                             )}

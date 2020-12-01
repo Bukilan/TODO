@@ -1,6 +1,6 @@
-import {NoteType, ArrayNotesType} from "../Types/models/nodes";
+import {ArrayNotesType, NoteType} from "../Types/models/nodes";
 import {AddNoteType} from "../Types/models/addNote";
-import {ArrayTagsType, TagType} from "../Types/models/tag";
+import {ArrayTagsType} from "../Types/models/tag";
 
 type ArrayType = 'NotesList' | 'filteredNotesList' | 'pinnedNotesList' | 'notPinnedList'
 
@@ -19,6 +19,8 @@ export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType, t
             ...payload
         }
     }
+
+    console.log('edit', type, newList, payload.isPinned)
 
     switch (type) {
         case "NotesList":
@@ -39,7 +41,6 @@ export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType, t
 
 export const DeleteNoteArrayMutator = (state: ArrayNotesType, id: number) => {
     const index = getNoteById(state, id)
-    console.log(index)
     if (index >= 0) {
         return [...state.slice(0, index), ...state.slice(index + 1)]
     } else return  state
@@ -103,7 +104,7 @@ export const createNewTagId = (state: ArrayTagsType) => {
 }
 
 export const AddTagArrayMutator = (state: ArrayTagsType, name: string) => {
-    const newArr = [
+    return [
         ...state,
         {
             id: createNewTagId(state),
@@ -111,5 +112,4 @@ export const AddTagArrayMutator = (state: ArrayTagsType, name: string) => {
             isActive: false,
         }
     ]
-    return newArr
 }

@@ -17,7 +17,7 @@ const initialTags = [
     {
         id: 3,
         name: 'УМЕРЕТЬ',
-        isActive: true
+        isActive: false
     }
 ]
 

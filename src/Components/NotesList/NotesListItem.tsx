@@ -56,7 +56,7 @@ const NotesListItem = ({ currentNote }: Props): ReactElement => {
                     <TagsCloudDisplay tags={noteTags} />
                 ) : null}
             </Paper>
-            <NoteModal initTitle={title} initDescription={description} id={id} isPinned={isPinned} isEditNote isOpen={isEditNoteOpen} handleClose={changeEditNoteOpen} />
+            <NoteModal initTitle={title} initDescription={description} id={id} isPinned={isPinned} initTags={noteTags} isEditNote isOpen={isEditNoteOpen} handleClose={changeEditNoteOpen} />
         </div>
     );
 }

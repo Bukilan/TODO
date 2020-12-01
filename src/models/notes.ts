@@ -15,11 +15,16 @@ const initialNotesState: ArrayNotesType = [
         {
           id: 1,
           name: 'Я',
-          isActive: false
+          isActive: true
         },
         {
           id: 2,
           name: 'ХОЧУ',
+          isActive: true
+        },
+        {
+          id: 3,
+          name: 'УМЕРЕТЬ',
           isActive: false
         },
       ]
@@ -29,18 +34,69 @@ const initialNotesState: ArrayNotesType = [
       title: 'title2',
       description: 'desc2',
       isPinned: false,
+      noteTags: [
+        {
+          id: 1,
+          name: 'Я',
+          isActive: false
+        },
+        {
+          id: 2,
+          name: 'ХОЧУ',
+          isActive: false
+        },
+        {
+          id: 3,
+          name: 'УМЕРЕТЬ',
+          isActive: false
+        },
+      ]
     },
     {
       id: 3,
       title: 'title3',
       description: 'desc3',
       isPinned: false,
+      noteTags: [
+        {
+          id: 1,
+          name: 'Я',
+          isActive: false
+        },
+        {
+          id: 2,
+          name: 'ХОЧУ',
+          isActive: false
+        },
+        {
+          id: 3,
+          name: 'УМЕРЕТЬ',
+          isActive: false
+        },
+      ]
     },
     {
       id: 4,
       title: 'Закрелённый ноут',
       description: 'ЛЛАЛЛАЛАЛАААЛАЛА',
       isPinned: true,
+      noteTags: [
+        {
+          id: 1,
+          name: 'Я',
+          isActive: false
+        },
+        {
+          id: 2,
+          name: 'ХОЧУ',
+          isActive: false
+        },
+        {
+          id: 3,
+          name: 'УМЕРЕТЬ',
+          isActive: false
+        },
+      ]
     },
 ]
 
@@ -105,6 +161,7 @@ export const notes: any = createModel<RootModel>()({
           ...state.pinnedNotesList,
           {
             ...state.notesList[pinnedNoteIndex],
+            isPinned: true
           }
         ],
         notPinnedList: DeleteNoteArrayMutator(state.notPinnedList, payload),
@@ -120,12 +177,14 @@ export const notes: any = createModel<RootModel>()({
           ...state.notPinnedList,
           {
             ...state.notesList[pinnedNoteIndex],
+            isPinned: false
           }
         ],
         filteredNotesList: [
         ...state.filteredNotesList,
         {
           ...state.notesList[pinnedNoteIndex],
+          isPinned: false
         }
       ],
       };
