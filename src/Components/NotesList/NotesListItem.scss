@@ -1,0 +1,28 @@
+.NotesListItem {
+    &-container:not(:last-child) {
+        margin-bottom: 30px;
+    }
+
+    &-note {
+        position: relative;
+        word-break: break-all;
+        padding: 10px 20px;
+        min-height: 200px;
+    }
+
+    &-edit {
+        position: absolute !important;
+        top: 5px;
+        right: 40px
+    }
+
+    &-delete {
+        position: absolute !important;
+        top: 5px;
+        right: 0
+    }
+
+    &-title {
+        margin: 2em 0 1em 0;
+    }
+}

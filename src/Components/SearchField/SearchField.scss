@@ -1,0 +1,17 @@
+.SearchField {
+  position: sticky !important;
+  top: 0;
+  width: 100%;
+
+  &-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 50px !important;
+    margin-top: 10px !important;
+  }
+
+  &-icon {
+    margin-right: 10px;
+  }
+}
