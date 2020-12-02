@@ -1,4 +1,5 @@
 {
+  "homepage": "http://Bukilan.github.io/TODO",
   "name": "TODO",
   "version": "1.0.0",
   "description": "",
@@ -20,9 +21,12 @@
   "devDependencies": {
     "@types/react": "16.9.19",
     "@types/react-dom": "16.9.5",
+    "gh-pages": "^3.1.0",
     "typescript": "3.7.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
