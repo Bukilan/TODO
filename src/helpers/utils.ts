@@ -20,8 +20,6 @@ export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType, t
         }
     }
 
-    console.log('edit', type, newList, payload.isPinned)
-
     switch (type) {
         case "NotesList":
             return newList
@@ -90,6 +88,36 @@ export const addTagToNoteArrayMutator = (state: ArrayNotesType, payload: string)
     })
 }
 
+export const filterNotesArrayMutator = (state: ArrayNotesType, tags: ArrayTagsType, searchQuery: string) => {
+    const searchedNotes = state.filter(item => item.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 || item.description.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
+    const tagsNotes: ArrayNotesType = []
+    state.map(note => {
+        const isFound = note.noteTags.find(noteTag => {
+            return tags.find(tag => noteTag.id === tag.id && noteTag.isActive)
+        })
+       if (isFound) tagsNotes.push(note)
+    })
+
+    const concatNotes = [...searchedNotes, ...tagsNotes]
+
+    const result: ArrayNotesType = []
+    concatNotes.forEach(item => {
+        if (getNoteById(searchedNotes, item.id) !== -1 && getNoteById(tagsNotes, item.id) !== -1 &&  getNoteById(result, item.id) === -1) {
+            result.push(item)
+        }
+    })
+
+    if (!tags.length) {
+        return searchedNotes
+    }
+
+    if (!searchQuery) {
+        return tagsNotes
+    }
+
+    return result
+}
+
 export const createNewId = (state: ArrayNotesType) => {
     return Math.max(...state.map(item => item.id)) + 1
 }
@@ -98,7 +126,7 @@ export const getTagById = (state: ArrayTagsType, id: number) => {
     return state.findIndex((el) => el.id === id);
 }
 
-export const changeTagStatus = (state: ArrayTagsType, id: number) => {
+export const changeTagStatus = (state: ArrayTagsType, id: number): ArrayTagsType => {
     const index = getTagById(state, id)
     const newList = [...state]
     if (index >= 0) {

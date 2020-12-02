@@ -1,25 +1,21 @@
-import React, { ReactElement, ChangeEvent, useState } from 'react';
+import React, { ReactElement, ChangeEvent } from 'react';
 import TextField from '@material-ui/core/TextField';
 import './SearchField.scss';
 import SearchIcon from '@material-ui/icons/Search';
 import Grid from "@material-ui/core/Grid";
-import { useDispatch } from "react-redux";
 
-const SearchField = (): ReactElement => {
-    const dispatch = useDispatch()
+type Props = {
+    searchQuery: string
+    onQueryChange: (e: ChangeEvent<HTMLInputElement>) => void
+}
 
-    const [searchQuery, setSearchQuery] = useState<string>('')
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value)
-        dispatch.notes.searchNotes(e.target.value)
-    }
+const SearchField = ({ searchQuery, onQueryChange }: Props): ReactElement => {
 
     return (
         <Grid container justify='center'>
             <Grid className='SearchField-container' item lg={4} sm={8} xs={10}>
                 <SearchIcon color='inherit' className='SearchField-icon' />
-                <TextField label="Поиск" placeholder="Найти заметку" value={searchQuery} onChange={handleChange} className='SearchField' id="standard-search" type="search" />
+                <TextField label="Поиск" placeholder="Найти заметку" value={searchQuery} onChange={onQueryChange} className='SearchField' id="standard-search" type="search" />
             </Grid>
         </Grid>
     );

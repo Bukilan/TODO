@@ -6,12 +6,18 @@ import {
   AddNoteArrayMutator,
   createNewId,
   deleteTagFromNoteArrayMutator,
-  addTagToNoteArrayMutator
+  addTagToNoteArrayMutator,
+  filterNotesArrayMutator,
 } from "../helpers/utils";
 import { RootModel } from ".";
 import { ArrayNotesType, StateNotesType, NoteType } from "../Types/models/nodes";
 import { AddNoteType } from "../Types/models/addNote";
+import {ArrayTagsType} from "../Types/models/tag";
 
+type NotesFilterType = {
+  activeTags: ArrayTagsType
+  searchQuery: string
+}
 
 const initialNotesState: ArrayNotesType = [
     {
@@ -141,7 +147,7 @@ export const notes: any = createModel<RootModel>()({
         ...state,
         notesList: editNoteArrayMutator(state.notesList, payload, 'NotesList'),
         filteredNotesList: editNoteArrayMutator(state.filteredNotesList, payload, 'filteredNotesList'),
-        notPinnedList: editNoteArrayMutator(state.filteredNotesList, payload, 'notPinnedList'),
+        notPinnedList: editNoteArrayMutator(state.notPinnedList, payload, 'notPinnedList'),
         pinnedNotesList: editNoteArrayMutator(state.pinnedNotesList, payload, 'pinnedNotesList')
       };
     },
@@ -152,13 +158,6 @@ export const notes: any = createModel<RootModel>()({
         filteredNotesList: DeleteNoteArrayMutator(state.filteredNotesList, payload),
         notPinnedList: DeleteNoteArrayMutator(state.notPinnedList, payload),
         pinnedNotesList: DeleteNoteArrayMutator(state.pinnedNotesList, payload),
-      };
-    },
-    successSearchNote(state: StateNotesType, payload: string): StateNotesType {
-      const searchedNotes = state.notPinnedList.filter(item => item.title.toLowerCase().indexOf(payload.toLowerCase()) !== -1 ||  item.description.toLowerCase().indexOf(payload.toLowerCase()) !== -1)
-      return {
-        ...state,
-        filteredNotesList: searchedNotes,
       };
     },
     successPinNote(state: StateNotesType, payload: number): StateNotesType {
@@ -214,6 +213,12 @@ export const notes: any = createModel<RootModel>()({
         filteredNotesList: addTagToNoteArrayMutator(state.filteredNotesList, payload),
         pinnedNotesList: addTagToNoteArrayMutator(state.pinnedNotesList, payload),
       };
+    },
+    successFilterNotes(state: StateNotesType, payload: NotesFilterType): StateNotesType {
+      return {
+        ...state,
+        filteredNotesList: filterNotesArrayMutator(state.notPinnedList, payload.activeTags, payload.searchQuery),
+      };
     }
   },
   effects: (dispatch) => {
@@ -239,11 +244,6 @@ export const notes: any = createModel<RootModel>()({
             payload
         )
       },
-      searchNotes(payload: string) {
-        notes.successSearchNote(
-            payload
-        )
-      },
       pinNote(payload: number) {
         notes.successPinNote(
             payload
@@ -262,6 +262,14 @@ export const notes: any = createModel<RootModel>()({
       addTagToNotes(payload: string) {
         notes.successAddTagToNotes(
             payload
+        )
+      },
+      filterNotes(payload: NotesFilterType) {
+        notes.successFilterNotes(
+            {
+              activeTags: payload.activeTags,
+              searchQuery: payload.searchQuery
+            }
         )
       }
     };
