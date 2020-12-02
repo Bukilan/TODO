@@ -2,130 +2,34 @@ import { createModel } from "@rematch/core";
 import {
   delay,
   editNoteArrayMutator,
-  DeleteNoteArrayMutator,
-  AddNoteArrayMutator,
-  createNewId,
+  deleteNoteArrayMutator,
+  addNoteArrayMutator,
+  createNewNoteId,
   deleteTagFromNoteArrayMutator,
   addTagToNoteArrayMutator,
   filterNotesArrayMutator,
 } from "../helpers/utils";
+import { initialNote, initialNotesState } from "../helpers/mocks";
 import { RootModel } from ".";
 import { ArrayNotesType, StateNotesType, NoteType } from "../Types/models/nodes";
 import { AddNoteType } from "../Types/models/addNote";
-import {ArrayTagsType} from "../Types/models/tag";
+import { ArrayTagsType } from "../Types/models/tag";
 
 type NotesFilterType = {
   activeTags: ArrayTagsType
   searchQuery: string
 }
 
-const initialNotesState: ArrayNotesType = [
-    {
-      id: 1,
-      title: 'title1',
-      description: 'desc1',
-      isPinned: false,
-      noteTags: [
-        {
-          id: 1,
-          name: 'Я',
-          isActive: true
-        },
-        {
-          id: 2,
-          name: 'ХОЧУ',
-          isActive: true
-        },
-        {
-          id: 3,
-          name: 'УМЕРЕТЬ',
-          isActive: false
-        },
-      ]
-    },
-    {
-      id: 2,
-      title: 'title2',
-      description: 'desc2',
-      isPinned: false,
-      noteTags: [
-        {
-          id: 1,
-          name: 'Я',
-          isActive: false
-        },
-        {
-          id: 2,
-          name: 'ХОЧУ',
-          isActive: false
-        },
-        {
-          id: 3,
-          name: 'УМЕРЕТЬ',
-          isActive: false
-        },
-      ]
-    },
-    {
-      id: 3,
-      title: 'title3',
-      description: 'desc3',
-      isPinned: false,
-      noteTags: [
-        {
-          id: 1,
-          name: 'Я',
-          isActive: false
-        },
-        {
-          id: 2,
-          name: 'ХОЧУ',
-          isActive: false
-        },
-        {
-          id: 3,
-          name: 'УМЕРЕТЬ',
-          isActive: false
-        },
-      ]
-    },
-    {
-      id: 4,
-      title: 'Закрелённый ноут',
-      description: 'ЛЛАЛЛАЛАЛАААЛАЛА',
-      isPinned: true,
-      noteTags: [
-        {
-          id: 1,
-          name: 'Я',
-          isActive: false
-        },
-        {
-          id: 2,
-          name: 'ХОЧУ',
-          isActive: false
-        },
-        {
-          id: 3,
-          name: 'УМЕРЕТЬ',
-          isActive: false
-        },
-      ]
-    },
-]
-
 export const notes: any = createModel<RootModel>()({
   state: {
-    notesList: [],
-    filteredNotesList: [],
-    pinnedNotesList: [],
-    notPinnedList: [],
+    notesList: initialNote,
+    filteredNotesList: initialNote,
+    pinnedNotesList: initialNote,
+    notPinnedList: initialNote,
   },
-  // @ts-ignore
   reducers: {
     successLoadNotesList(state: StateNotesType, payload: ArrayNotesType): StateNotesType {
       return {
-        ...state,
         notesList: payload,
         notPinnedList: payload.filter(item => !item.isPinned),
         filteredNotesList: payload.filter(item => !item.isPinned),
@@ -133,13 +37,13 @@ export const notes: any = createModel<RootModel>()({
       };
     },
     successAddLoadNote(state: StateNotesType, payload: AddNoteType): StateNotesType {
-      const newId = createNewId(state.notesList)
+      const newId = createNewNoteId(state.notesList)
       return {
         ...state,
-        notesList: AddNoteArrayMutator(state.notesList, payload, newId, 'NotesList'),
-        filteredNotesList:  AddNoteArrayMutator(state.filteredNotesList, payload, newId, 'filteredNotesList'),
-        notPinnedList: AddNoteArrayMutator(state.notPinnedList, payload, newId, 'notPinnedList'),
-        pinnedNotesList: AddNoteArrayMutator(state.pinnedNotesList, payload, newId, 'pinnedNotesList'),
+        notesList: addNoteArrayMutator(state.notesList, payload, newId, 'NotesList'),
+        filteredNotesList:  addNoteArrayMutator(state.filteredNotesList, payload, newId, 'filteredNotesList'),
+        notPinnedList: addNoteArrayMutator(state.notPinnedList, payload, newId, 'notPinnedList'),
+        pinnedNotesList: addNoteArrayMutator(state.pinnedNotesList, payload, newId, 'pinnedNotesList'),
       };
     },
     successEditNote(state: StateNotesType, payload: NoteType): StateNotesType {
@@ -154,10 +58,10 @@ export const notes: any = createModel<RootModel>()({
     successDeleteNote(state: StateNotesType, payload: number): StateNotesType {
       return {
         ...state,
-        notesList: DeleteNoteArrayMutator(state.notesList, payload),
-        filteredNotesList: DeleteNoteArrayMutator(state.filteredNotesList, payload),
-        notPinnedList: DeleteNoteArrayMutator(state.notPinnedList, payload),
-        pinnedNotesList: DeleteNoteArrayMutator(state.pinnedNotesList, payload),
+        notesList: deleteNoteArrayMutator(state.notesList, payload),
+        filteredNotesList: deleteNoteArrayMutator(state.filteredNotesList, payload),
+        notPinnedList: deleteNoteArrayMutator(state.notPinnedList, payload),
+        pinnedNotesList: deleteNoteArrayMutator(state.pinnedNotesList, payload),
       };
     },
     successPinNote(state: StateNotesType, payload: number): StateNotesType {
@@ -171,15 +75,15 @@ export const notes: any = createModel<RootModel>()({
             isPinned: true
           }
         ],
-        notPinnedList: DeleteNoteArrayMutator(state.notPinnedList, payload),
-        filteredNotesList:  DeleteNoteArrayMutator(state.filteredNotesList, payload)
+        notPinnedList: deleteNoteArrayMutator(state.notPinnedList, payload),
+        filteredNotesList:  deleteNoteArrayMutator(state.filteredNotesList, payload)
       };
     },
     successUnPinNote(state: StateNotesType, payload: number): StateNotesType {
       const pinnedNoteIndex = state.notesList.findIndex((el) => el.id === payload)
       return {
         ...state,
-        pinnedNotesList: DeleteNoteArrayMutator(state.pinnedNotesList, payload),
+        pinnedNotesList: deleteNoteArrayMutator(state.pinnedNotesList, payload),
         notPinnedList: [
           ...state.notPinnedList,
           {
@@ -224,47 +128,56 @@ export const notes: any = createModel<RootModel>()({
   effects: (dispatch) => {
     const { notes } = dispatch;
     return {
-      load() {
+      async load() {
+          await delay(500);
           notes.successLoadNotesList(
               initialNotesState
           )
       },
-      addNote(payload: AddNoteType) {
+      async addNote(payload: AddNoteType) {
+        await delay(300);
           notes.successAddLoadNote(
               payload
           )
       },
-      editNote(payload: NoteType) {
+      async editNote(payload: NoteType) {
+        await delay(300);
         notes.successEditNote(
             payload
         )
       },
-      deleteNote(payload: number) {
+      async deleteNote(payload: number) {
+        await delay(300);
         notes.successDeleteNote(
             payload
         )
       },
-      pinNote(payload: number) {
+      async pinNote(payload: number) {
+        await delay(200);
         notes.successPinNote(
             payload
         )
       },
-      unPinNote(payload: number) {
+      async unPinNote(payload: number) {
+        await delay(200);
         notes.successUnPinNote(
             payload
         )
       },
-      deleteTagFromNotes(payload: number) {
+      async deleteTagFromNotes(payload: number) {
+        await delay(500);
         notes.successDeleteTagFromNotes(
             payload
         )
       },
-      addTagToNotes(payload: string) {
+      async addTagToNotes(payload: string) {
+        await delay(500);
         notes.successAddTagToNotes(
             payload
         )
       },
-      filterNotes(payload: NotesFilterType) {
+      async filterNotes(payload: NotesFilterType) {
+        await delay(700);
         notes.successFilterNotes(
             {
               activeTags: payload.activeTags,

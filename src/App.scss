@@ -1,3 +1,7 @@
 .PageLayout {
   margin-bottom: 100px;
+  &-empty {
+    font-size: 45px;
+    word-break: break-word;
+  }
 }

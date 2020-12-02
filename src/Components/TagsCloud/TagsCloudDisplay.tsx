@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import './TagsCloudDisplay.scss';
 import Chip from '@material-ui/core/Chip';
-import {ArrayTagsType} from "../../Types/models/tag";
+import { ArrayTagsType } from "../../Types/models/tag";
 
 type Props = {
     tags: ArrayTagsType

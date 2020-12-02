@@ -1,19 +1,18 @@
-import React, {ReactElement, ChangeEvent, useState, useEffect} from 'react';
+import React, { ReactElement, ChangeEvent, useState, useEffect } from 'react';
 import ModalWindow from "../ModalWindow";
 import Button from '@material-ui/core/Button';
 import TextareaAutosize from 'react-textarea-autosize';
-import './NoteModal.scss';
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Switch from '@material-ui/core/Switch';
 import TagsCloudItem from "../TagsCloud/TagsCloudItem";
-import {ArrayTagsType, StateTagsType} from "../../Types/models/tag";
-import {RootStateType} from "../../Types/models/root";
-import {changeTagStatus} from "../../helpers/utils";
+import { ArrayTagsType, StateTagsType } from "../../Types/models/tag";
+import { RootStateType } from "../../Types/models/root";
+import { changeTagStatus } from "../../helpers/utils";
+import './NoteModal.scss';
 
 type Props = {
     isOpen: boolean,
     handleClose: () => void,
-
     initTitle?: string,
     initDescription?: string,
     id?: number,

@@ -2,8 +2,8 @@ import { AddNoteType } from './addNote'
 import { ArrayTagsType } from "./tag";
 
 export type NoteType = AddNoteType & {
-    id: number,
-    isPinned: boolean,
+    id: number
+    isPinned: boolean
     noteTags: ArrayTagsType
 }
 

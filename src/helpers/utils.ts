@@ -1,18 +1,18 @@
-import {ArrayNotesType, NoteType} from "../Types/models/nodes";
-import {AddNoteType} from "../Types/models/addNote";
-import {ArrayTagsType} from "../Types/models/tag";
+import { ArrayNotesType, NoteType } from "../Types/models/nodes";
+import { AddNoteType } from "../Types/models/addNote";
+import { ArrayTagsType } from "../Types/models/tag";
 
 type ArrayType = 'NotesList' | 'filteredNotesList' | 'pinnedNotesList' | 'notPinnedList'
 
 export const delay = (ms: number) =>
 	new Promise(resolve => setTimeout(resolve, ms))
 
-export const getNoteById = (state: ArrayNotesType, id: number) => {
+export const getNoteIndexById = (state: ArrayNotesType, id: number): number => {
     return state.findIndex((el) => el.id === id);
 }
 
-export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType, type: ArrayType) => {
-    const index = getNoteById(state, payload.id)
+export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType, type: ArrayType): ArrayNotesType => {
+    const index = getNoteIndexById(state, payload.id)
     const newList = [...state]
     if (index >= 0) {
         newList[index] = {
@@ -37,15 +37,15 @@ export const editNoteArrayMutator = (state: ArrayNotesType, payload: NoteType, t
     }
 }
 
-export const DeleteNoteArrayMutator = (state: ArrayNotesType, id: number) => {
-    const index = getNoteById(state, id)
+export const deleteNoteArrayMutator = (state: ArrayNotesType, id: number): ArrayNotesType => {
+    const index = getNoteIndexById(state, id)
     if (index >= 0) {
         return [...state.slice(0, index), ...state.slice(index + 1)]
     } else return  state
 }
 
 
-export const AddNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType, newId: number, type: ArrayType) => {
+export const addNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType, newId: number, type: ArrayType): ArrayNotesType => {
     const newArr = [
         ...state,
         {
@@ -70,25 +70,25 @@ export const AddNoteArrayMutator = (state: ArrayNotesType, payload: AddNoteType,
     }
 }
 
-export const deleteTagFromNoteArrayMutator = (state: ArrayNotesType, payload: number) => {
+export const deleteTagFromNoteArrayMutator = (state: ArrayNotesType, payload: number): ArrayNotesType => {
     return state.map(item => {
         return {
             ...item,
-            noteTags: DeleteTagArrayMutator(item.noteTags, payload)
+            noteTags: deleteTagArrayMutator(item.noteTags, payload)
         }
     })
 }
 
-export const addTagToNoteArrayMutator = (state: ArrayNotesType, payload: string) => {
+export const addTagToNoteArrayMutator = (state: ArrayNotesType, payload: string): ArrayNotesType => {
     return state.map(item => {
         return {
             ...item,
-            noteTags: AddTagArrayMutator(item.noteTags, payload)
+            noteTags: addTagArrayMutator(item.noteTags, payload)
         }
     })
 }
 
-export const filterNotesArrayMutator = (state: ArrayNotesType, tags: ArrayTagsType, searchQuery: string) => {
+export const filterNotesArrayMutator = (state: ArrayNotesType, tags: ArrayTagsType, searchQuery: string): ArrayNotesType => {
     const searchedNotes = state.filter(item => item.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 || item.description.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
     const tagsNotes: ArrayNotesType = []
     state.map(note => {
@@ -102,7 +102,7 @@ export const filterNotesArrayMutator = (state: ArrayNotesType, tags: ArrayTagsTy
 
     const result: ArrayNotesType = []
     concatNotes.forEach(item => {
-        if (getNoteById(searchedNotes, item.id) !== -1 && getNoteById(tagsNotes, item.id) !== -1 &&  getNoteById(result, item.id) === -1) {
+        if (getNoteIndexById(searchedNotes, item.id) !== -1 && getNoteIndexById(tagsNotes, item.id) !== -1 &&  getNoteIndexById(result, item.id) === -1) {
             result.push(item)
         }
     })
@@ -118,16 +118,16 @@ export const filterNotesArrayMutator = (state: ArrayNotesType, tags: ArrayTagsTy
     return result
 }
 
-export const createNewId = (state: ArrayNotesType) => {
+export const createNewNoteId = (state: ArrayNotesType): number => {
     return Math.max(...state.map(item => item.id)) + 1
 }
 
-export const getTagById = (state: ArrayTagsType, id: number) => {
+export const getTagIndexById = (state: ArrayTagsType, id: number): number => {
     return state.findIndex((el) => el.id === id);
 }
 
 export const changeTagStatus = (state: ArrayTagsType, id: number): ArrayTagsType => {
-    const index = getTagById(state, id)
+    const index = getTagIndexById(state, id)
     const newList = [...state]
     if (index >= 0) {
         newList[index] = {
@@ -138,18 +138,18 @@ export const changeTagStatus = (state: ArrayTagsType, id: number): ArrayTagsType
     return newList
 }
 
-export const DeleteTagArrayMutator = (state: ArrayTagsType, id: number) => {
-    const index = getTagById(state, id)
+export const deleteTagArrayMutator = (state: ArrayTagsType, id: number): ArrayTagsType => {
+    const index = getTagIndexById(state, id)
     if (index >= 0) {
         return [...state.slice(0, index), ...state.slice(index + 1)]
     } else return  state
 }
 
-export const createNewTagId = (state: ArrayTagsType) => {
+export const createNewTagId = (state: ArrayTagsType): number => {
     return Math.max(...state.map(item => item.id)) + 1
 }
 
-export const AddTagArrayMutator = (state: ArrayTagsType, name: string) => {
+export const addTagArrayMutator = (state: ArrayTagsType, name: string): ArrayTagsType => {
     return [
         ...state,
         {

@@ -1,26 +1,27 @@
-import React, {ReactElement, useState} from 'react';
+import React, { ReactElement, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
-import './NotesListItem.scss';
 import NoteModal from '../NoteModal';
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import TagsCloudDisplay from "../TagsCloud/TagsCloudDisplay";
-import {ArrayTagsType} from "../../Types/models/tag";
-import {NoteType} from "../../Types/models/nodes";
+import { NoteType } from "../../Types/models/nodes";
+import './NotesListItem.scss';
 
 type Props = {
     currentNote: NoteType
 }
 
-const NotesListItem = ({ currentNote }: Props): ReactElement => {
+const NotesListItem = ({ currentNote }: Props): ReactElement | null => {
     const {id, title, description, isPinned, noteTags} = currentNote
 
     const dispatch = useDispatch()
 
     const [isEditNoteOpen, setIsEditNoteOpen] = useState<boolean>(false)
+
+    if (!title) return null
 
     const changeEditNoteOpen = (): void => {
         setIsEditNoteOpen(prev => !prev)

@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
-import './TagsCloudItem.scss';
 import IconButton from "@material-ui/core/IconButton";
+import './TagsCloudItem.scss';
 
 type Props = {
     name: string,
@@ -12,7 +12,8 @@ type Props = {
     onDeleteClick?: (id: number) => () => void
 }
 
-const TagsCloudItem = ({ name, isActive, onElemClick, onDeleteClick, id }: Props): ReactElement => {
+const TagsCloudItem = ({ name, isActive, onElemClick, onDeleteClick, id }: Props): ReactElement | null => {
+    if (!name) return null
     return (
         <div className='TagsCloudItem-container'>
             <Button className='TagsCloudItem-button' onClick={onElemClick(id)} variant={!isActive ? 'outlined' : 'contained'} color={!isActive ? 'inherit' : 'primary'} size='small'>

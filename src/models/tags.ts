@@ -1,35 +1,16 @@
 import { createModel } from "@rematch/core";
 import { RootModel } from ".";
-import {ArrayTagsType, StateTagsType} from "../Types/models/tag";
-import { changeTagStatus, DeleteTagArrayMutator, AddTagArrayMutator } from "../helpers/utils";
-
-const initialTags = [
-    {
-        id: 1,
-        name: 'Я',
-        isActive: false
-    },
-    {
-        id: 2,
-        name: 'ХОЧУ',
-        isActive: false
-    },
-    {
-        id: 3,
-        name: 'УМЕРЕТЬ',
-        isActive: false
-    }
-]
+import { ArrayTagsType, StateTagsType } from "../Types/models/tag";
+import { changeTagStatus, deleteTagArrayMutator, addTagArrayMutator, delay } from "../helpers/utils";
+import { initialTag, initialTags } from "../helpers/mocks";
 
 export const tags: any = createModel<RootModel>()({
     state: {
-        tagsList: []
+        tagsList: initialTag
     },
-    // @ts-ignore
     reducers: {
         successLoadTagsList(state: StateTagsType, payload: ArrayTagsType): StateTagsType {
             return {
-                ...state,
                 tagsList: payload
             }
         },
@@ -42,35 +23,39 @@ export const tags: any = createModel<RootModel>()({
         successDeleteTag(state: StateTagsType, payload: number): StateTagsType {
             return {
                 ...state,
-                tagsList: DeleteTagArrayMutator(state.tagsList, payload)
+                tagsList: deleteTagArrayMutator(state.tagsList, payload)
             }
         },
         successAddTag(state: StateTagsType, payload: string): StateTagsType {
             return {
                 ...state,
-                tagsList: AddTagArrayMutator(state.tagsList, payload)
+                tagsList: addTagArrayMutator(state.tagsList, payload)
             }
         }
     },
     effects: (dispatch) => {
         const { tags } = dispatch;
         return {
-            load() {
+            async load() {
+                await delay(500);
                 tags.successLoadTagsList(
                     initialTags
                 )
             },
-            changeStatus(id: number) {
+            async changeStatus(id: number) {
+                await delay(200);
                 tags.successChangeTagStatus(
                     id
                 )
             },
-            deleteTag(id: number) {
+            async deleteTag(id: number) {
+                await delay(200);
                 tags.successDeleteTag(
                     id
                 )
             },
-            addTag(name: string) {
+            async addTag(name: string) {
+                await delay(200);
                 tags.successAddTag(
                     name
                 )

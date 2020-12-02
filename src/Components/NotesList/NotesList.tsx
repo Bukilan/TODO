@@ -1,8 +1,7 @@
-import React, {ReactElement, ReactNode} from 'react';
-import Grid from '@material-ui/core/Grid';
+import React, { ReactElement, ReactNode } from 'react';
 import NotesListItem from "./NotesListItem";
-import './NotesList.scss';
 import Button from "@material-ui/core/Button";
+import './NotesList.scss';
 
 type Props = {
     children: ReactNode,
@@ -12,14 +11,10 @@ type Props = {
 const NotesList = ({ children, openAddModal }: Props): ReactElement => {
     return (
         <div className='NotesList-container'>
-            <Grid container justify='center'>
-                <Grid item lg={4} sm={8} xs={10}>
-                    <Button fullWidth className='NotesList-addNoteButton' variant="contained" color="primary" type='button' onClick={openAddModal}>
-                        Добавить заметку
-                    </Button>
-                    {children}
-                </Grid>
-            </Grid>
+            <Button fullWidth className='NotesList-addNoteButton' variant="contained" color="primary" type='button' onClick={openAddModal}>
+                Добавить заметку
+            </Button>
+            {children}
         </div>  
     );
 }

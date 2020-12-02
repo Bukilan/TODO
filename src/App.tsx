@@ -1,17 +1,18 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {StateNotesType, RootStateType} from "./Types/models";
+import { StateNotesType, RootStateType } from "./Types/models";
 import NotesList from "./Components/NotesList/NotesList";
-import './App.scss';
 import NoteModal from "./Components/NoteModal";
 import SearchField from "./Components/SearchField";
 import TagsCloud from './Components/TagsCloud'
-import {StateTagsType} from "./Types/models/tag";
-import {changeTagStatus} from "./helpers/utils";
+import { StateTagsType } from "./Types/models/tag";
+import { changeTagStatus } from "./helpers/utils";
+import Grid from "@material-ui/core/Grid";
+import './App.scss';
 
 const App = () => {
     const dispatch = useDispatch()
-    const { filteredNotesList, notesList, pinnedNotesList, notPinnedList }: StateNotesType = useSelector(({ notes }: RootStateType) => notes);
+    const { filteredNotesList, pinnedNotesList }: StateNotesType = useSelector(({ notes }: RootStateType) => notes);
 
     const { tagsList }: StateTagsType = useSelector(({ tags }: RootStateType) => tags);
 
@@ -66,22 +67,30 @@ const App = () => {
     useEffect(() => {
         dispatch.notes.load()
         dispatch.tags.load()
-    }, [])
+    }, [dispatch])
 
     return (
         <div className='PageLayout'>
-            <SearchField searchQuery={searchQuery} onQueryChange={handleQueryChange} />
-            <TagsCloud tagsList={tagsList} newAddName={newAddName} onAddNameChange={handleAddTagChangeName} onAddNameSubmit={handleAddTagSubmit} onTagClick={handleTagClick} onTagDelete={handleTagDeleteClick} />
-            {filteredNotesList ? (
-                <NotesList openAddModal={changeAddNoteOpen}>
-                    {pinnedNotesList.map((item) => (
-                        <NotesList.Item key={`pinned-${item.id}`} currentNote={item} />
-                    ))}
-                    {filteredNotesList.map((item) => (
-                        <NotesList.Item key={item.id}  currentNote={item} />
-                    ))}
-                </NotesList>
-            ) : null}
+            <Grid container justify='center'>
+                <Grid item lg={4} sm={8} xs={10}>
+                    <SearchField searchQuery={searchQuery} onQueryChange={handleQueryChange} />
+                    <TagsCloud tagsList={tagsList} newAddName={newAddName} onAddNameChange={handleAddTagChangeName} onAddNameSubmit={handleAddTagSubmit} onTagClick={handleTagClick} onTagDelete={handleTagDeleteClick} />
+                    {filteredNotesList.length ? (
+                        <NotesList openAddModal={changeAddNoteOpen}>
+                            {pinnedNotesList.map((item) => (
+                                <NotesList.Item key={`pinned-${item.id}`} currentNote={item} />
+                            ))}
+                            {filteredNotesList.map((item) => (
+                                <NotesList.Item key={item.id}  currentNote={item} />
+                            ))}
+                        </NotesList>
+                    ) : (
+                        <div className='PageLayout-empty'>
+                            Похоже у вас нет заметок ) Попробуйте добавить новую
+                        </div>
+                    )}
+                </Grid>
+            </Grid>
             <NoteModal isOpen={isAddNoteOpen} handleClose={changeAddNoteOpen} />
         </div>
     );
