@@ -6,7 +6,7 @@ Use:
 - Material-UI
 - SASS
 
-*DEMO* https://bukilan.github.io/TODO/
+**DEMO:** https://bukilan.github.io/TODO/
 
 ### To run the project use `npm run start`
 
